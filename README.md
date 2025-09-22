@@ -198,7 +198,102 @@ the majority of the annotated objects are in the range of 20m-80m.</b></font></p
 
 * We also conduct a statistical analysis of the number of objects with each label at different distance ranges from our vehicle, as shown in Figure 7. Most objects are within 60 meters of our ego vehicle. 
 
-# 7. Getting Started
+# 7. Using simulation methods to generate simulated dataset
+We store the simulation methods in the “simulation methods” folder.
+
+### 3D_Corruptions_AD
+* LiDAR and 4D radar simulation method
+```bash
+lidar = np.array([N,4])
+from .LiDAR_corruptions import rain_sim, snow_sim, fog_sim
+lidar_cor = rain_sim(lidar, severity)
+
+from .LiDAR_corruptions import gaussian_noise_bbox
+bbox = results['ann_info']['gt_bboxes_3d']
+lidar_cor = gaussian_noise_bbox(lidar, severity,bbox)
+from .LiDAR_corruptions import temporal_alignment_noise
+noise_pose = spatial_alignment_noise(ori_pose, severity)
+```
+* Image simulation method
+```bash
+from .Camera_corruptions import ImageAddSnow,ImageAddFog,ImageAddRain
+snow_sim = ImageAddSnow(severity, seed=2022)
+img_bgr_255_np_uint8 = results['img'] # the img in mmdet3d loading pipeline
+img_rgb_255_np_uint8 = img_bgr_255_np_uint8[:,:,[2,1,0]]
+image_aug_rgb = snow_sim(
+    image=img_rgb_255_np_uint8
+    )
+image_aug_bgr = image_aug_rgb[:,:,[2,1,0]]
+results['img'] = image_aug_bgr
+
+from .Camera_corruptions import ImageBBoxOperation
+bbox_shear = ImageBBoxOperation(severity)
+img_bgr_255_np_uint8 = results['img']
+bboxes_corners = results['gt_bboxes_3d'].corners
+bboxes_centers = results['gt_bboxes_3d'].center
+lidar2img = results['lidar2img'] 
+img_rgb_255_np_uint8 = img_bgr_255_np_uint8[:, :, [2, 1, 0]]
+c = [0.05, 0.1, 0.15, 0.2, 0.25][bbox_shear.severity - 1]
+b = np.random.uniform(c - 0.05, c + 0.05) * np.random.choice([-1, 1])
+d = np.random.uniform(c - 0.05, c + 0.05) * np.random.choice([-1, 1])
+e = np.random.uniform(c - 0.05, c + 0.05) * np.random.choice([-1, 1])
+f = np.random.uniform(c - 0.05, c + 0.05) * np.random.choice([-1, 1])
+transform_matrix = torch.tensor([
+    [1, 0, b],
+    [d, 1, e],
+    [f, 0, 1]
+]).float()
+
+image_aug_rgb = bbox_shear(
+    image=img_rgb_255_np_uint8,
+    bboxes_centers=bboxes_centers,
+    bboxes_corners=bboxes_corners,
+    transform_matrix=transform_matrix,
+    lidar2img=lidar2img,
+)
+image_aug_bgr = image_aug_rgb[:, :, [2, 1, 0]]
+results['img'] = image_aug_bgr
+```
+### 3D_Corruptions_AD
+* LiDAR and 4D radar simulation method
+```bash
+python3 converter/lidar_converter.py \
+    --corruption snow \
+    --root_folder /workspace/data/nuscenes \
+    --dst_folder /workspace/multicorrupt/snow/3/ \
+    --severity 3 \
+    --n_cpus 64 \
+    --sweep true
+```
+* Image simulation method
+```bash
+python converter/img_converter.py \
+    --corruption snow \
+    --root_folder /workspace/data/nuscenes \
+    --dst_folder /workspace/multicorrupt/snow/3 \
+    --severity 3 \
+    --n_cpus 24
+```
+### Robo3d
+* LiDAR and 4D radar simulation method
+```bash
+python simulation.py \
+    --root_folder ./data_root/Kitti \
+    --dst_folder  ./save_root/snow/light \
+    --snowfall_rate  0.5  \
+    --terminal_velocity  2.0   \
+```
+
+### RoboDepth
+* Image simulation method
+```bash
+python corruptions/create.py 
+    --image_list splits/eigen.txt  
+    --if_fog
+```
+
+
+# 8. Getting Started
 
 ### Environment
 This is the documentation for how to use our detection frameworks with Dual-Radar dataset.
