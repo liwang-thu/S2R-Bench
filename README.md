@@ -254,7 +254,7 @@ image_aug_rgb = bbox_shear(
 image_aug_bgr = image_aug_rgb[:, :, [2, 1, 0]]
 results['img'] = image_aug_bgr
 ```
-### 3D_Corruptions_AD
+### MultiCorrupt
 * LiDAR and 4D radar simulation method
 ```bash
 python3 converter/lidar_converter.py \
