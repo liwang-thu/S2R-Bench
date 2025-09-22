@@ -199,7 +199,7 @@ the majority of the annotated objects are in the range of 20m-80m.</b></font></p
 * We also conduct a statistical analysis of the number of objects with each label at different distance ranges from our vehicle, as shown in Figure 7. Most objects are within 60 meters of our ego vehicle. 
 
 # 7. Using simulation methods to generate simulated dataset
-We store the simulation methods in the “simulation methods” folder.
+We store the simulation methods in the “simulation method” folder.
 
 ### 3D_Corruptions_AD
 * LiDAR and 4D radar simulation method
