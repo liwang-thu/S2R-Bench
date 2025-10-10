@@ -199,10 +199,10 @@ the majority of the annotated objects are in the range of 20m-80m.</b></font></p
 * We also conduct a statistical analysis of the number of objects with each label at different distance ranges from our vehicle, as shown in Figure 7. Most objects are within 60 meters of our ego vehicle. 
 
 # 7. Using simulation methods to generate simulated dataset
-We store the simulation methods in the “simulation method” folder.
-
+We store the simulation methods in the "simulation method" folder, which enable adding various environmental perturbations or noise to sensor data (LiDAR, 4D radar, and images) to generate datasets simulating unobserved real-world conditions (e.g., adverse weather like rain, snow, or fog). Below are the specific methods and their functionalities:
 ### 3D_Corruptions_AD
-* LiDAR and 4D radar simulation method
+Provides simulation interfaces for LiDAR, 4D radar, and images, with perturbation intensity controlled  severity levels.
+* LiDAR and 4D radar simulation method. The following method is an example of simulating a Spatial Misalignment scene:
 ```bash
 lidar = np.array([N,4])
 from .LiDAR_corruptions import rain_sim, snow_sim, fog_sim
@@ -214,7 +214,7 @@ lidar_cor = gaussian_noise_bbox(lidar, severity,bbox)
 from .LiDAR_corruptions import temporal_alignment_noise
 noise_pose = spatial_alignment_noise(ori_pose, severity)
 ```
-* Image simulation method
+* Image simulation method. The following method is an example of simulating a snow scene:
 ```bash
 from .Camera_corruptions import ImageAddSnow,ImageAddFog,ImageAddRain
 snow_sim = ImageAddSnow(severity, seed=2022)
@@ -255,7 +255,7 @@ image_aug_bgr = image_aug_rgb[:, :, [2, 1, 0]]
 results['img'] = image_aug_bgr
 ```
 ### MultiCorrupt
-* LiDAR and 4D radar simulation method
+* LiDAR and 4D radar simulation method. The following method is an example of simulating a snow scene:
 ```bash
 python3 converter/lidar_converter.py \
     --corruption snow \
@@ -265,7 +265,7 @@ python3 converter/lidar_converter.py \
     --n_cpus 64 \
     --sweep true
 ```
-* Image simulation method
+* Image simulation method. The following method is an example of simulating a snow scene:
 ```bash
 python converter/img_converter.py \
     --corruption snow \
@@ -275,7 +275,7 @@ python converter/img_converter.py \
     --n_cpus 24
 ```
 ### Robo3d
-* LiDAR and 4D radar simulation method
+* LiDAR and 4D radar simulation method. The following method is an example of simulating a snow scene:
 ```bash
 python simulation.py \
     --root_folder ./data_root/Kitti \
@@ -285,7 +285,7 @@ python simulation.py \
 ```
 
 ### RoboDepth
-* Image simulation method
+A simulation tool for image depth estimation tasks. The following method is an example of simulating a foggy scene：
 ```bash
 python corruptions/create.py 
     --image_list splits/eigen.txt  
