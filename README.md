@@ -214,7 +214,7 @@ lidar_cor = gaussian_noise_bbox(lidar, severity,bbox)
 from .LiDAR_corruptions import temporal_alignment_noise
 noise_pose = spatial_alignment_noise(ori_pose, severity)
 ```
-* Image simulation method. The following method is an example of simulating a snow scene:
+* Image simulation method. The following method is an example of simulating a Snow scene:
 ```bash
 from .Camera_corruptions import ImageAddSnow,ImageAddFog,ImageAddRain
 snow_sim = ImageAddSnow(severity, seed=2022)
@@ -255,7 +255,7 @@ image_aug_bgr = image_aug_rgb[:, :, [2, 1, 0]]
 results['img'] = image_aug_bgr
 ```
 ### MultiCorrupt
-* LiDAR and 4D radar simulation method. The following method is an example of simulating a snow scene:
+* LiDAR and 4D radar simulation method. The following method is an example of simulating a Snow scene:
 ```bash
 python3 converter/lidar_converter.py \
     --corruption snow \
@@ -265,7 +265,7 @@ python3 converter/lidar_converter.py \
     --n_cpus 64 \
     --sweep true
 ```
-* Image simulation method. The following method is an example of simulating a snow scene:
+* Image simulation method. The following method is an example of simulating a Snow scene:
 ```bash
 python converter/img_converter.py \
     --corruption snow \
@@ -275,7 +275,7 @@ python converter/img_converter.py \
     --n_cpus 24
 ```
 ### Robo3d
-* LiDAR and 4D radar simulation method. The following method is an example of simulating a snow scene:
+* LiDAR and 4D radar simulation method. The following method is an example of simulating a Snow scene:
 ```bash
 python simulation.py \
     --root_folder ./data_root/Kitti \
@@ -285,7 +285,7 @@ python simulation.py \
 ```
 
 ### RoboDepth
-A simulation tool for image depth estimation tasks. The following method is an example of simulating a foggy scene：
+A simulation tool for image depth estimation tasks. The following method is an example of simulating a Foggy scene：
 ```bash
 python corruptions/create.py 
     --image_list splits/eigen.txt  
